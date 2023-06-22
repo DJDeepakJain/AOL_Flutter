@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "643884484202",
+    "project_id": "screen-chat-aol",
+    "storage_bucket": "screen-chat-aol.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643884484202:android:f63983f3ef03730593ac13",
+        "android_client_info": {
+          "package_name": "com.example.aol_matrimony_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643884484202-d7tvn6df3jn7co8b3am489suao3i3do5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjRF2pDyK72D6cPvV5zx6khthMrVb4nhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "643884484202-d7tvn6df3jn7co8b3am489suao3i3do5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643884484202:android:b27b748b601f4c3c93ac13",
+        "android_client_info": {
+          "package_name": "com.example.screen_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643884484202-d7tvn6df3jn7co8b3am489suao3i3do5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjRF2pDyK72D6cPvV5zx6khthMrVb4nhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "643884484202-d7tvn6df3jn7co8b3am489suao3i3do5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
