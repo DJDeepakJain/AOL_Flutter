@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'chatScreen.dart';
+import 'messageScreen.dart';
 import 'matchProfile.dart';
 import 'recievedRoute.dart';
 import 'sentRoute.dart';
@@ -90,7 +90,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       title: Row(
         children: [
           Image.asset(
-            'assets/images/logo.png',
+            'assets/images/ring.png',
             height: 14,
             width: 20,
           ),

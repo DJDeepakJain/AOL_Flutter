@@ -1,5 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -19,100 +21,81 @@ class _ReceivedRouteState extends State<ReceivedRoute> {
     getReceivedList();
   }
 
-  Future<void> getReceivedList() async {
+  void getReceivedList() async {
     try {
-      setState(() {
-        isLoaderOpen = true;
-      });
+      final prefs = await SharedPreferences.getInstance();
+      final jsonValue = prefs.getString('@storage_login');
+      final asyncData = jsonValue != null ? json.decode(jsonValue) : null;
+      setIsLoaderOpen(true);
 
-      // Check network connectivity
-      // var connectivityResult = await (Connectivity().checkConnectivity());
-      // if (connectivityResult == ConnectivityResult.none) {
-      //   setState(() {
-      //     isLoaderOpen = false;
-      //   });
-      //   showDialog(
-      //     context: context,
-      //     builder: (context) => AlertDialog(
-      //       title: Text('Network Error'),
-      //       content: Text('You are not connected to the internet. Please check your connection.'),
-      //       actions: [
-      //         TextButton(
-      //           child: Text('OK'),
-      //           onPressed: () {
-      //             Navigator.of(context).pop();
-      //           },
-      //         ),
-      //       ],
-      //     ),
-      //   );
-      //   return;
-      // }
-
-      // Make API request
-      final response = await http.post(
-        Uri.parse('/showReceived'),
-        // body: {'user_id': userId}, // Replace with your API endpoint and data
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        if (data['status'] == 'success') {
-          setState(() {
-            receivedData = data['data'];
-            isLoaderOpen = false;
+      // Connectivity().checkConnectivity().then((connectivityResult) {
+      //   if (connectivityResult == ConnectivityResult.mobile ||
+      //       connectivityResult == ConnectivityResult.wifi) {
+          final usrid = asyncData['user']['id'];
+          http.post(Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/showReceived'),body : {'user_id': 207})
+              .then((response) {
+            if (response.statusCode == 200) {
+              final responseData = json.decode(response.body);
+              if (responseData['status'] == 'success') {
+                setReceivedData(responseData['data']);
+                setIsLoaderOpen(false);
+                setRefreshing(false);
+              }else {
+                setReceivedData(responseData['data']);
+                setResMsg(responseData['message']);
+                setIsLoaderOpen(false);
+                setRefreshing(false);
+              }
+            } else {
+              setIsLoaderOpen(false);
+              setRefreshing(false);
+              // Handle server error
+            }
+          }).catchError((error) {
+            setIsLoaderOpen(false);
+            setRefreshing(false);
+            // Handle error
           });
-        } else {
-          setState(() {
-            receivedData = data['data'];
-            resmsg = data['message'];
-            isLoaderOpen = false;
-          });
-        }
-      } else {
-        setState(() {
-          isLoaderOpen = false;
-        });
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Server Error'),
-            content: Text('An error occurred while communicating with the server.'),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    } catch (error) {
-      setState(() {
-        isLoaderOpen = false;
-      });
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Error'),
-          content: Text('An error occurred: $error'),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
+      //   }else {
+      //     setIsLoaderOpen(false);
+      //     showDialog(
+      //       context: context,
+      //       builder: (context) => AlertDialog(
+      //         title: Text('Network Error'),
+      //         content: Text('You are not connected to the internet. Please check your internet connection.'),
+      //         actions: [
+      //           TextButton(
+      //             onPressed: () => Navigator.pop(context),
+      //             child: Text('OK'),
+      //           ),
+      //         ],
+      //       ),
+      //     );
+      //   }
+      // });
+    }catch (error) {
+      setIsLoaderOpen(false);
+      setRefreshing(false);
     }
   }
 
-  void storeAcceptDecline(String itemId, String statusId) {
+  void setIsLoaderOpen(bool isOpen) {
+    // Set the state variable 'isLoaderOpen' with the provided value
+  }
+
+  void setReceivedData(dynamic data) {
+    // Set the state variable 'receivedData' with the provided data
+  }
+
+  void setResMsg(String message) {
+    // Set the state variable 'resMsg' with the provided message
+  }
+
+  void setRefreshing(bool isRefreshing) {
+    // Set the state variable 'isRefreshing' with the provided value
+  }
+
+    void storeAcceptDecline(String itemId, String statusId) {
     // Implement your accept/decline logic here
   }
 

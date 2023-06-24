@@ -26,8 +26,8 @@ class _SentRouteState extends State<SentRoute> {
     try {
       // Make sure to replace the URL with your API endpoint
       final response = await http.post(
-        Uri.parse('https://example.com/showSentRequests'),
-        body: {'user_id': 'usrid'},
+        Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/showSentRequests'),
+        body: {'user_id': '207'},
       );
 
       if (response.statusCode == 200) {
@@ -45,10 +45,10 @@ class _SentRouteState extends State<SentRoute> {
           });
         }
       } else {
-        print(response.statusCode);
+        print('404 from sent route${response.statusCode}');
       }
     } catch (error) {
-      print(error);
+      print('404 Caught ${error}');
     }
 
     setState(() {
@@ -64,7 +64,7 @@ class _SentRouteState extends State<SentRoute> {
     try {
       // Make sure to replace the URL with your API endpoint
       final response = await http.post(
-        Uri.parse('https://example.com/withdrawRequest'),
+        Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/withdrawRequest'),
         body: {'from_user': fromUser, 'to_user': toUser},
       );
 
@@ -89,13 +89,13 @@ class _SentRouteState extends State<SentRoute> {
             ),
           );
         } else {
-          print(data['status']);
+          print('data erro'+data['status']);
         }
       } else {
-        print(response.statusCode);
+        print('eeror response code${response.statusCode}');
       }
     } catch (error) {
-      print(error);
+      print('error caught again ${error}');
     }
 
     setState(() {

@@ -9,12 +9,16 @@ class MatchesRoute extends StatefulWidget {
 
 class _MatchesRouteState extends State<MatchesRoute> {
   bool isLoaderOpen = true;
+  int profileCompleted = 0;
+  int profileInCompleted = 0;
+  String photo = '';
   bool userVerified = false;
   String userVerifyStatus = '';
   List<dynamic> matchData = [];
-  String resMsg = '';
+  String resmsg = '';
   int totalLeftConnection = 0;
   bool showConnection = false;
+  bool refreshing = false;
 
   @override
   void initState() {
@@ -23,186 +27,116 @@ class _MatchesRouteState extends State<MatchesRoute> {
   }
 
   Future<void> getProfileCompletion() async {
-    print("get profile completion");
-    // Fetch data from API and update the state
-    // try {
-    //   // Make the API request
-    //   http.Response response = await http.post(
-    //     Uri.parse('/profileCompletion'),
-    //     body: {
-    //       'user_id': asyncData.user.id.toString(),
-    //     },
-    //   );
-    //
-    //   if (response.statusCode == 200) {
-    //     // Parse the response data
-    //     var data = json.decode(response.body);
-    //     if (data['status'] == 'success') {
-    //       setState(() {
-    //         // Update the state with received data
-    //         setProfileCompleted(int.parse(data['data']['complete']));
-    //         setProfileInCompleted(int.parse(data['data']['incomplete']));
-    //       });
-    //       getMemberData();
-    //     } else {
-    //       print(data);
-    //       setState(() {
-    //         setIsLoaderOpen(false);
-    //       });
-    //     }
-    //   } else {
-    //     print(response.body);
-    //     setState(() {
-    //       setIsLoaderOpen(false);
-    //     });
-    //   }
-    // } catch (error) {
-    //   print(error);
-    // }
+    setState(() {
+      isLoaderOpen = true;
+    });
+
+    // Make the API call using http package or your preferred http library
+    // Replace the API endpoint with your actual endpoint
+    final response = await http.post(Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/profileCompletion'), body: {
+      'user_id': '207',
+    });
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['status'] == 'success') {
+        final completed = int.parse(data['data']['complete']);
+        final incompleted = int.parse(data['data']['incomplete']);
+        setState(() {
+          profileCompleted = completed;
+          profileInCompleted = incompleted;
+        });
+
+        getMemberData();
+      } else {
+        print('data from profile Completion'+data);
+        setState(() {
+          isLoaderOpen = false;
+        });
+      }
+    } else {
+      print(response.body);
+      setState(() {
+        isLoaderOpen = false;
+      });
+    }
   }
 
   Future<void> getMemberData() async {
-    print("get member data");
-    // Fetch data from API and update the state
-    // try {
-    //   // Make the API request
-    //   http.Response response = await http.get(
-    //     Uri.parse('/userProfiles?user_id=' + asyncData.user.id.toString()),
-    //   );
-    //
-    //   if (response.statusCode == 200) {
-    //     // Parse the response data
-    //     var data = json.decode(response.body);
-    //     if (data['status'] == 'success') {
-    //       setState(() {
-    //         // Update the state with received data
-    //         setUserVerified(false);
-    //         if (data['data']['userData']['user_verification'] == null ||
-    //             data['data']['userData']['user_verification'] == 0) {
-    //           setUserVerified(true);
-    //           setUserVerifyStatus('0');
-    //         } else {
-    //           setUserVerifyStatus(data['data']['userData']['user_verification']);
-    //         }
-    //         if (data['data']['photos'].length > 0) {
-    //           setPhoto(data['data']['photos'][0]['file_name']);
-    //         }
-    //         getProfileMatches();
-    //       });
-    //     } else {
-    //       print(data);
-    //       setState(() {
-    //         setIsLoaderOpen(false);
-    //         setRefreshing(false);
-    //       });
-    //     }
-    //   } else {
-    //     print(response.body);
-    //     setState(() {
-    //       setIsLoaderOpen(false);
-    //       setRefreshing(false);
-    //     });
-    //   }
-    // } catch (error) {
-    //   setState(() {
-    //     setIsLoaderOpen(false);
-    //     setRefreshing(false);
-    //   });
-    //   print(error);
-    // }
-  }
-
-  // Future<void> getProfileMatches() async {
-  //   print("get match data");
-  //   // Fetch data from API and update the state
-  //   try {
-  //     // Make the API request
-  //     http.Response response = await http.get(
-  //       Uri.parse('profileMatches/get_match_profiles/' + asyncData.user.id.toString()),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       // Parse the response data
-  //       var data = json.decode(response.body);
-  //       if (data['status'] == 'success') {
-  //         setState(() {
-  //           // Update the state with received data
-  //           setMatchData(data['data']);
-  //           setTotalLeftConnection(int.parse(data['total_left_connection']));
-  //           setShowConnection(false);
-  //           setIsLoaderOpen(false);
-  //         });
-  //       } else {
-  //         print(data);
-  //         setState(() {
-  //           setIsLoaderOpen(false);
-  //         });
-  //       }
-  //     } else {
-  //       print(response.body);
-  //       setState(() {
-  //         setIsLoaderOpen(false);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     print(error);
-  //     setState(() {
-  //       setIsLoaderOpen(false);
-  //     });
-  //   }
-  // }
-
-  // void setProfileCompleted(int complete) {
-  //   setState(() {
-  //     profileComplete = complete;
-  //   });
-  // }
-
-  // void setProfileInCompleted(int incomplete) {
-  //   setState(() {
-  //     profileIncomplete = incomplete;
-  //   });
-  // }
-
-  void setUserVerified(bool verified) {
     setState(() {
-      userVerified = verified;
+      isLoaderOpen = true;
     });
+
+    // Make the API call using http package or your preferred http library
+    // Replace the API endpoint with your actual endpoint
+    final response = await http.get(
+      Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/userProfiles?user_id=207'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['status'] == 'success') {
+        setState(() {
+          userVerified = false;
+          if (data['data']['userData']['user_verification'] == null ||
+              data['data']['userData']['user_verification'] == 0) {
+            userVerified = true;
+            userVerifyStatus = '0';
+          } else {
+            userVerifyStatus = data['data']['userData']['user_verification'];
+          }
+
+          if (data['data']['photos'].length > 0) {
+            photo = data['data']['photos'][0]['file_name'];
+          }
+
+          getProfileMatches();
+        });
+      } else {
+        print('data from memberdata'+data);
+        setState(() {
+          isLoaderOpen = false;
+          refreshing = false;
+        });
+      }
+    } else {
+      print('404 from memberdata'+response.body);
+      setState(() {
+        isLoaderOpen = false;
+        refreshing = false;
+      });
+    }
   }
 
-  void setUserVerifyStatus(String status) {
+  Future<void> getProfileMatches() async {
     setState(() {
-      userVerifyStatus = status;
+      isLoaderOpen = true;
     });
-  }
 
-  void setMatchData(List<dynamic> data) {
-    setState(() {
-      matchData = data;
-    });
-  }
+    // Make the API call using http package or your preferred http library
+    // Replace the API endpoint with your actual endpoint
+    final response =
+    await http.get(Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/profileMatches/get_match_profiles/207'));
 
-  void setTotalLeftConnection(int total) {
-    setState(() {
-      totalLeftConnection = total;
-    });
-  }
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
 
-  void setShowConnection(bool show) {
-    setState(() {
-      showConnection = show;
-    });
-  }
+      if (data['status'] == 'success') {
+        setState(() {
+          matchData = data['data'];
+        });
+      } else {
+        print('data'+data);
+      }
+    } else {
+      print('res'+ response.body);
+    }
 
-  void setIsLoaderOpen(bool isOpen) {
     setState(() {
-      isLoaderOpen = isOpen;
-    });
-  }
-
-  void setRefreshing(bool refreshing) {
-    setState(() {
-      isLoaderOpen = refreshing;
+      isLoaderOpen = false;
+      refreshing = false;
     });
   }
 
@@ -212,44 +146,24 @@ class _MatchesRouteState extends State<MatchesRoute> {
       appBar: AppBar(
         title: Text('Matches'),
       ),
-      body: isLoaderOpen
-          ? Center(
-        child: CircularProgressIndicator(),
-      )
-          : SingleChildScrollView(
-        child: Column(
-          children: [
-            if (userVerified && userVerifyStatus == '0')
-              Container(
-                // Display verification message
-                padding: EdgeInsets.all(16.0),
-                color: Colors.yellow,
-                child: Text('Your account is not verified.'),
+      body: Container(
+        child: ListView.builder(
+          itemCount: matchData.length,
+          itemBuilder: (context, index) {
+            final match = matchData[index];
+            return ListTile(
+              title: Text(match['name']),
+              subtitle: Text(match['description']),
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(match['photo']),
               ),
-            if (showConnection)
-              Container(
-                // Display connection message
-                padding: EdgeInsets.all(16.0),
-                color: Colors.green,
-                child: Text('You have $totalLeftConnection connections left.'),
-              ),
-            ListView.builder(
-              // Display match profiles
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: matchData.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(matchData[index]['name']),
-                  subtitle: Text(matchData[index]['description']),
-                );
+              onTap: () {
+                // Handle match item tap
               },
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
   }
 }
-
-
