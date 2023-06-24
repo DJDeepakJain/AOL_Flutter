@@ -47,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _subscribeToMessages() {
-    final docId = getChatRoomDocId(widget.uuid, 'dyvhfTMaCPhfGcxiGXwjVJzYyjG3');
+    final docId = getChatRoomDocId(widget.uuid, 'nK9hXmVvE7eRPlgLeNGgSDvDc0k2');
     final collectionRef =
     FirebaseFirestore.instance.collection('chats/$docId/msg');
     _messagesStream = collectionRef.orderBy('createdAt', descending: true).snapshots();
@@ -60,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> _sendMessage(String text) async {
     if (text.trim().isEmpty) return;
 
-    final docId = getChatRoomDocId(widget.uuid, 'dyvhfTMaCPhfGcxiGXwjVJzYyjG3');
+    final docId = getChatRoomDocId(widget.uuid, 'nK9hXmVvE7eRPlgLeNGgSDvDc0k2');
     final collectionRef =
     FirebaseFirestore.instance.collection('chats/$docId/msg');
     final messageData = {
@@ -291,7 +291,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: ChatScreen(
-        user_id: '204',
+        user_id: '207',
         uuid: 'sample_uuid',
         username: 'Sample User',
         image: 'https://sampleimage.com/image.jpg',

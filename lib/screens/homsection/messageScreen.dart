@@ -24,7 +24,8 @@ class _MessageRouteState extends State<MessageRoute> {
   Future<void> getMessages() async {
     try {
       // Perform network requests using http package
-      var response = await http.get(Uri.parse('https://matrimony.abhosting.co.in/api/api/auth/user_chat_threads/207'));
+      var response = await http.get(Uri.parse(
+          'https://matrimony.abhosting.co.in/api/api/auth/user_chat_threads/204'));
 
       if (response.statusCode == 200) {
         var responseData = json.decode(response.body);
@@ -70,15 +71,18 @@ class _MessageRouteState extends State<MessageRoute> {
     return GestureDetector(
       onTap: () {
         // Navigate to chat screen
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            ChatScreen(
-                user_id:item['user_id'],
-                uuid: item['uuid'],
-                username: item['member_name'],
-                image: 'https://matrimony.abhosting.co.in/public/${item['user_profile_picture']}',
-                userManage: item['profile_managed'],
-                deactivated: item['deactivated'],
-            )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatScreen(
+                      user_id: item['user_id'],
+                      uuid: item['uuid'],
+                      username: item['member_name'],
+                      image:
+                          'https://matrimony.abhosting.co.in/public/${item['user_profile_picture']}',
+                      userManage: item['profile_managed'],
+                      deactivated: item['deactivated'],
+                    )));
 
         // Navigator.pushNamed(context, '/chat', arguments: {
         //   'user_id': item['user_id'],
@@ -119,25 +123,48 @@ class _MessageRouteState extends State<MessageRoute> {
                         ),
                       ),
                       // if (item['deactivated'])
-                        Container(
-                          margin: EdgeInsets.only(left: 5.0),
-                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Text(
-                            'DEACTIVATED',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      Container(
+                        margin: EdgeInsets.only(left: 5.0),
+                        padding: EdgeInsets.symmetric(horizontal: 4.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
+                        child: Text(
+                          'DEACTIVATED',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 5.0),
-                  Text(
-                    '${item['last_message']}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Text(
+                        'last msg: ${item['last_msg']}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      (item['last_msg_sent'] == 0)
+                          ? Icon(Icons.done)
+                          : (item['last_msg_received'] == 0)
+                              ? Icon(Icons.done_all)
+                              : (item['unseen'] == 1)
+                                  ? Icon(
+                                      Icons.done_all,
+                                      color: Colors.blue,
+                                    )
+                                  : Icon(Icons
+                                      .signal_wifi_statusbar_connected_no_internet_4),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'unread count: ${item['unread_msg']}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ],
               ),
