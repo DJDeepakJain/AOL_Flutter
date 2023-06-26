@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -79,6 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     try {
       await collectionRef.add(messageData);
+      sendNotification('207');
     } catch (error) {
       print('Error sending message: $error');
     } finally {
@@ -87,7 +92,53 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
   }
-
+  void sendNotification(String userId) async {
+    print("user_id: $userId");
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      try {
+        var response = await http.post(
+          Uri.parse('/chatnotify'),
+          body: jsonEncode({'user_id': userId}),
+        );
+        if (response.statusCode == 200) {
+          var data = jsonDecode(response.body);
+          print("notify: $data");
+          // if (data['status'] == 'success') {
+          //   // Handle success case here
+          //   // setIsLoaderOpen(false);
+          //   // showDialog(...);
+          //   // getMemberData();
+          // } else {
+          //   print(data['status']);
+          //   // Handle other status cases here
+          //   // setIsLoaderOpen(false);
+          //   // showDialog(...);
+          //   // showErrorAlert(data['status']);
+          // }
+        } else {
+          print(response.statusCode);
+          // Handle server error here
+          // setIsLoaderOpen(false);
+          // showDialog(...);
+          // showErrorAlert("Server Error");
+        }
+      } catch (error) {
+        print(error);
+        // Handle error here
+        // setIsLoaderOpen(false);
+        // showDialog(...);
+        // showErrorAlert("Server Error");
+      }
+    } else {
+      print("Network Error");
+      // Handle network error here
+      // setIsLoaderOpen(false);
+      // showDialog(...);
+      // showErrorAlert("Network Error");
+    }
+  }
   Widget _buildAppBar() {
     return AppBar(
       title: Row(
